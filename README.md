@@ -1,19 +1,19 @@
-# Resize Artboard
-
-Version 0.2
+## Resize Artboard
 
 A plugin that resizes an artboard to fit its content.
 
-## Usage
+### Usage
 
 The easy way to use Resize Artboard is by using the shortcut key. Select any artboard and enter:
 
-    ctrl+shift+z
+    CTRL + SHIFT + Z
 
-Alternatively, you can access the same command from the menu by navigation to
+Alternatively, you can access the same command from the menu by navigating to
 
     Plugins > Resize Artboard > Fit Artboard to Content
 
-## License
+### License & Version
 
-MIT
+Version 0.2
+
+MIT License
