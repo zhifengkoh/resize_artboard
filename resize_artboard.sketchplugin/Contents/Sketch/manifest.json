@@ -1,0 +1,25 @@
+{
+  "name": "Resize Artboard",
+  "description": "Resizes an artboard to fit its content",
+  "author": "Zhifeng Koh",
+  "version": 0.1,
+  "identifier": "com.example.sketch.shape-plugins",
+  "updateURL": "https://github.com/downloads/example/sketchplugins/sketchplugins.json",
+  "compatibleVersion": "3.3.2",
+  "bundleVersion": 1,
+  "commands": [
+    {
+      "name": "Fit Artboard to Content",
+      "identifier": "fit_artboard_to_content",
+      "shortcut": "ctrl shift z",
+      "script": "resize_artboard.sketchscript",
+      "handler": "onRun"
+    }
+  ],
+  "menu": {
+    "items": [
+      "fit_artboard_to_content"
+    ],
+    "isRoot": "true"
+  }
+}
