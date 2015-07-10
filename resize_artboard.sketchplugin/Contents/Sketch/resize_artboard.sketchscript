@@ -1,3 +1,5 @@
+var APP = [NSApplication sharedApplication];
+
 //To begin, check if the user selected at artboard. Otherwise, we can't proceed.
 var artboard = context.selection.firstObject();
 if (!artboard || artboard.className() != 'MSArtboardGroup') {
@@ -5,7 +7,6 @@ if (!artboard || artboard.className() != 'MSArtboardGroup') {
 }
 
 //If an artboard was selected, then proceed to initialize the rest of our script variables
-var APP = [NSApplication sharedApplication];
 var layers = artboard.layers();
 var minX = 0;
 var minY = 0;
@@ -18,21 +19,27 @@ for (var i = 0; i < layers.count(); i++) {
 	var frame = layer.frame();
 	var r = layer.rect();
 
-	//Reset the boundaries of the bounding box to be the first layer, to start
+	var leftEdge = r.origin.x;
+	var rightEdge = leftEdge + r.size.width;
+	var topEdge = r.origin.y;
+	var bottomEdge = topEdge + r.size.height;
+
+	//Reset the boundaries of the bounding box to be the first layer for a baseline
 	if (i == 0) {
-		minX = frame.minX();
-		minY = frame.minY();
-		maxX = frame.maxX();
-		maxY = frame.maxY();
+		minX = leftEdge;
+		minY = topEdge;
+		maxX = rightEdge;
+		maxY = bottomEdge;
 	}
 
-	if (frame.minX() < minX) minX = frame.minX();
-	if (frame.minY() < minY) minY = frame.minY();
-	if (frame.maxX() > maxX) maxX = frame.maxX();
-	if (frame.maxY() > maxY) maxY = frame.maxY();
+	if (leftEdge < minX) minX = leftEdge;
+	if (rightEdge > maxX) maxX = rightEdge;
+	if (topEdge < minY) minY = topEdge;
+	if (bottomEdge > maxY) maxY = bottomEdge;
 }
 
 //Resize the artboard
+
 var r = artboard.rect();
 r.size.width = (maxX - minX);
 r.size.height = (maxY - minY);
