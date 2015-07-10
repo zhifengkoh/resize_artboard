@@ -1,60 +1,56 @@
-var DEBUG = true; //Global constant to control debugging log statements
+//To begin, check if the user selected at artboard. Otherwise, we can't proceed.
+var artboard = context.selection.firstObject();
+if (!artboard || artboard.className() != 'MSArtboardGroup') {
+	exitWithError("Oops", "You need to select an artboard");
+}
 
-var documentName = context.document.displayName();
-debugLog('The current document is named: ' + documentName);
+//If an artboard was selected, then proceed to initialize the rest of our script variables
+var APP = [NSApplication sharedApplication];
+var layers = artboard.layers();
+var minX = 0;
+var minY = 0;
+var maxX = 0;
+var maxY = 0;
 
-// Step 1: Get the currently selected artboard
-// This needs to be refactored to use the current selection's parent artboard, and terminate if none are found (e.g. if a layer is living outside of an artboard).
-var doc = context.document;
-var artboard = [[[doc currentPage] artboards] firstObject];
-var frame = [artboard frame];
-debugLog("The current artboard is named: " + artboard.name());
+//Manually find the dimensions of the imaginary bounding box surrounding all the immediate child layers of the artboard
+for (var i = 0; i < layers.count(); i++) {
+	var layer = layers.objectAtIndex(i);
+	var frame = layer.frame();
+	var r = layer.rect();
 
-//Step 2: Select all the sublayers of the artboard and get their bounding dimensions
-var artboardLayers = artboard.layers();
-var selectedCount = artboardLayers.count();
-debugLog(artboardLayers);
-debugLog("Artboard layers: " + selectedCount);
-
-if (selectedCount != 0) { //No use proceeding if there are no layers inside the artboard
-
-	debugLog("Selected Layers:");
-	for (var i = 0; i < selectedCount; i++) {
-		var layer = artboardLayers.objectAtIndex(i);
-		debugLog(i + "." + layer.name());
-		[layer select:true byExpandingSelection:true];
+	//Reset the boundaries of the bounding box to be the first layer, to start
+	if (i == 0) {
+		minX = frame.minX();
+		minY = frame.minY();
+		maxX = frame.maxX();
+		maxY = frame.maxY();
 	}
-	var selection = context.selection;
-	var bounds = MSLayerGroup.groupBoundsForLayers(selection);
 
-	debugLog("bounds x: "+bounds.origin.x);
-	debugLog("bounds y: "+bounds.origin.y);
-	debugLog("bounds width: "+bounds.size.width);
-	debugLog("bounds height: "+bounds.size.height);
-	debugLog(bounds);
+	if (frame.minX() < minX) minX = frame.minX();
+	if (frame.minY() < minY) minY = frame.minY();
+	if (frame.maxX() > maxX) maxX = frame.maxX();
+	if (frame.maxY() > maxY) maxY = frame.maxY();
+}
 
-	//Step 3: Resize the artboard to fit its contents
-	//Resize artboard
-	frame.width = bounds.size.width;
-	frame.height = bounds.size.height;
-	debugLog("Artboard dimensions: [" + frame.width() +", " + frame.height() + "]");
+//Resize the artboard
+var r = artboard.rect();
+r.size.width = (maxX - minX);
+r.size.height = (maxY - minY);
+artboard.setRect(r);
 
-	//Step 4: Move the selection to the top left of the artboard
-	//Reposition the selection - this is not working
-	bounds.origin.x = frame.x();
-	bounds.origin.y = frame.y();
-	debugLog("bounds x: "+bounds.origin.x);
-	debugLog("bounds y: "+bounds.origin.y);
-
-	//Step 5: Deselect the layers
+//Reposition all the artboard's layers
+for (var i = 0; i < layers.count(); i++) {
+	var layer = layers.objectAtIndex(i);
+	var frame = layer.frame();
+	frame.subtractX(minX);
+	frame.subtractY(minY);
 }
 
 /*
  * FUNCTIONS
  * ===========================================================================
  */
-function debugLog(str) {
-	if (DEBUG) {
-		log(str);
-	}
+function exitWithError(title, message) {
+	[APP displayDialog:message withTitle:title];
+	throw(nil);
 }
