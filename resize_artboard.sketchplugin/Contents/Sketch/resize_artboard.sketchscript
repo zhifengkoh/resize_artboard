@@ -1,59 +1,60 @@
-var DEBUG = true;
-var documentName = context.document.displayName();
-if (DEBUG) {
-	log('The current document is named: ' + documentName);
-}
+var DEBUG = true; //Global constant to control debugging log statements
 
-// Step 0: Select the artboard
+var documentName = context.document.displayName();
+debugLog('The current document is named: ' + documentName);
+
+// Step 1: Get the currently selected artboard
 // This needs to be refactored to use the current selection's parent artboard, and terminate if none are found (e.g. if a layer is living outside of an artboard).
 var doc = context.document;
 var artboard = [[[doc currentPage] artboards] firstObject];
 var frame = [artboard frame];
-if (DEBUG) {
-	log("The current artboard is named: " + artboard.name());
-}
+debugLog("The current artboard is named: " + artboard.name());
 
-//Step 1: Select all the sublayers of the artboard and get their bounding dimensions
+//Step 2: Select all the sublayers of the artboard and get their bounding dimensions
 var artboardLayers = artboard.layers();
 var selectedCount = artboardLayers.count();
-if (DEBUG) {
-	log(artboardLayers);
-	log("Artboard layers: " + selectedCount);
-}
+debugLog(artboardLayers);
+debugLog("Artboard layers: " + selectedCount);
 
 if (selectedCount != 0) { //No use proceeding if there are no layers inside the artboard
-	if (DEBUG) {
-		log("Selected Layers:");
-	}
+
+	debugLog("Selected Layers:");
 	for (var i = 0; i < selectedCount; i++) {
 		var layer = artboardLayers.objectAtIndex(i);
-		log(i + "." + layer.name());
+		debugLog(i + "." + layer.name());
 		[layer select:true byExpandingSelection:true];
 	}
 	var selection = context.selection;
 	var bounds = MSLayerGroup.groupBoundsForLayers(selection);
-	if (DEBUG) {
-		log("bounds x: "+bounds.origin.x);
-		log("bounds y: "+bounds.origin.y);
-		log("bounds width: "+bounds.size.width);
-		log("bounds height: "+bounds.size.height);
-		log(bounds);
-	}
 
-	//Step 2: Resize the artboard to fit its contents, and move the selection to the top left of the artboard, then deselect
+	debugLog("bounds x: "+bounds.origin.x);
+	debugLog("bounds y: "+bounds.origin.y);
+	debugLog("bounds width: "+bounds.size.width);
+	debugLog("bounds height: "+bounds.size.height);
+	debugLog(bounds);
+
+	//Step 3: Resize the artboard to fit its contents
 	//Resize artboard
 	frame.width = bounds.size.width;
 	frame.height = bounds.size.height;
-	if (DEBUG) {
-		log("Artboard dimensions: [" + frame.width() +", " + frame.height() + "]");
-	}
+	debugLog("Artboard dimensions: [" + frame.width() +", " + frame.height() + "]");
 
-	//Reposition the selection
+	//Step 4: Move the selection to the top left of the artboard
+	//Reposition the selection - this is not working
 	bounds.origin.x = frame.x();
 	bounds.origin.y = frame.y();
-	if (DEBUG) {
-		log("bounds x: "+bounds.origin.x);
-		log("bounds y: "+bounds.origin.y);
-	}
+	debugLog("bounds x: "+bounds.origin.x);
+	debugLog("bounds y: "+bounds.origin.y);
 
+	//Step 5: Deselect the layers
+}
+
+/*
+ * FUNCTIONS
+ * ===========================================================================
+ */
+function debugLog(str) {
+	if (DEBUG) {
+		log(str);
+	}
 }
