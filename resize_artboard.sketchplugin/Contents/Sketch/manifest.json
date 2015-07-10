@@ -2,7 +2,7 @@
   "name": "Resize Artboard",
   "description": "Resizes an artboard to fit its content",
   "author": "Zhifeng Koh",
-  "version": 0.1,
+  "version": 0.2,
   "identifier": "com.example.sketch.shape-plugins",
   "updateURL": "https://github.com/downloads/example/sketchplugins/sketchplugins.json",
   "compatibleVersion": "3.3.2",

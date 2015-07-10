@@ -4,11 +4,14 @@ var onRun = function(context) {
 	//To begin, check if the user selected at artboard. Otherwise, we can't proceed.
 	var artboard = context.selection.firstObject();
 	if (!artboard || artboard.className() != 'MSArtboardGroup') {
-		exitWithError("Oops", "You need to select an artboard");
+		exitWithError("No artboard selected", "You need to select an artboard");
 	}
 
-	//If an artboard was selected, then proceed to initialize the rest of our script variables
+	//If an artboard was selected, then proceed
 	var layers = artboard.layers();
+	if (layers.count() == 0) {
+		exitWithError("The artboard is empty", "Please select an artboard that contains layers.");
+	}
 	var minX = 0;
 	var minY = 0;
 	var maxX = 0;
@@ -40,7 +43,6 @@ var onRun = function(context) {
 	}
 
 	//Resize the artboard
-
 	var r = artboard.rect();
 	r.size.width = (maxX - minX);
 	r.size.height = (maxY - minY);
