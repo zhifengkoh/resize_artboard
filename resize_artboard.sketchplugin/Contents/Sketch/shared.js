@@ -17,28 +17,23 @@ function resizeArtboard(artboard) {
     return; //If the artboard contains no layers, return and do nothing
   }
 
-  var minX = 0;
-  var minY = 0;
-  var maxX = 0;
-  var maxY = 0;
+  var layer = layers.firstObject();
+  var r = layer.rect();
+  //Set the boundaries of the bounding box to be the first layer for a baseline
+  var minX = getLeftEdge(r);
+  var minY = getTopEdge(r);
+  var maxX = getRightEdge(r);
+  var maxY = getBottomEdge(r);
 
   //Find the dimensions of the bounding box surrounding all the immediate child layers of the artboard
   for (var i = 0; i < layers.count(); i++) {
-    var layer = layers.objectAtIndex(i);
-    var r = layer.rect(); //rect() returns a CGRect object
+    layer = layers.objectAtIndex(i);
+    r = layer.rect();
 
-    var leftEdge = r.origin.x;
-    var rightEdge = leftEdge + r.size.width;
-    var topEdge = r.origin.y;
-    var bottomEdge = topEdge + r.size.height;
-
-    //Reset the boundaries of the bounding box to be the first layer for a baseline
-    if (i == 0) {
-      minX = leftEdge;
-      minY = topEdge;
-      maxX = rightEdge;
-      maxY = bottomEdge;
-    }
+    var leftEdge = getLeftEdge(r);
+    var rightEdge = getRightEdge(r);
+    var topEdge = getTopEdge(r);
+    var bottomEdge = getBottomEdge(r);
 
     if (leftEdge < minX) minX = leftEdge;
     if (rightEdge > maxX) maxX = rightEdge;
@@ -96,6 +91,22 @@ function resizeSelectedArtboards(context) {
 // function resizeAllArtboards(context) {
 //
 // }
+
+function getLeftEdge(cgrect) {
+  return cgrect.origin.x;
+}
+
+function getRightEdge(cgrect) {
+  return cgrect.origin.x + cgrect.size.width;
+}
+
+function getTopEdge(cgrect) {
+  return cgrect.origin.y;
+}
+
+function getBottomEdge(cgrect) {
+  return cgrect.origin.y + cgrect.size.height;
+}
 
 function throwNoArtboardSelectedError() {
   exitWithError("No artboard selected", "You need to select an artboard");
