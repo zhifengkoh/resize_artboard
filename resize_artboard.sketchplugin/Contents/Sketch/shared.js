@@ -71,8 +71,6 @@ function resizeArtboard(artboard) {
  */
 function resizeOneSelectedArtboard(context) {
   debug("[Function Call] resizeOneSelectedArtboard(context)");
-  debug("with param 'context'");
-  debug(context);
   var artboard = context.selection.firstObject();
   //Check if the user selected an artboard. Otherwise, we can't proceed.
   if (artboard && artboard.className() == 'MSArtboardGroup') {
@@ -83,13 +81,13 @@ function resizeOneSelectedArtboard(context) {
 }
 
 /*
- * resizeMultipleSelectedArtboards(context)
- * ----------------------------------------
+ * resizeSelectedArtboards(context)
+ * ---------------------------------
  * @param context The context object
  *
- * Wrapper function for resizing multiple selected artboards
+ * Wrapper function for resizing one or more selected artboards
  */
-function resizeMultipleSelectedArtboards(context) {
+function resizeSelectedArtboards(context) {
   var artboards = context.selection;
   var iter = [artboards objectEnumerator];
   var atLeastOneArtboardResized = false;
