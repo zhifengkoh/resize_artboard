@@ -25,7 +25,6 @@ function resizeArtboard(artboard) {
   //Find the dimensions of the bounding box surrounding all the immediate child layers of the artboard
   for (var i = 0; i < layers.count(); i++) {
     var layer = layers.objectAtIndex(i);
-    var frame = layer.frame();
     var r = layer.rect(); //rect() returns a CGRect object
 
     var leftEdge = r.origin.x;
@@ -56,27 +55,10 @@ function resizeArtboard(artboard) {
   //Reposition all of the artboard's layers
   for (var i = 0; i < layers.count(); i++) {
     var layer = layers.objectAtIndex(i);
-    var frame = layer.frame();
-    frame.subtractX(minX);
-    frame.subtractY(minY);
-  }
-}
-
-/*
- * resizeOneSelectedArtboard(context)
- * ----------------------------------
- * @param context The context object
- *
- * Wrapper function for resizing one selected artboard
- */
-function resizeOneSelectedArtboard(context) {
-  debug("[Function Call] resizeOneSelectedArtboard(context)");
-  var artboard = context.selection.firstObject();
-  //Check if the user selected an artboard. Otherwise, we can't proceed.
-  if (artboard && artboard.className() == 'MSArtboardGroup') {
-      resizeArtboard(artboard);
-  } else {
-    throwNoArtboardSelectedError();
+    var lr = layer.rect();
+    lr.origin.x -= minX;
+    lr.origin.y -= minY;
+    layer.setRect(lr);
   }
 }
 
@@ -126,4 +108,23 @@ function exitWithError(title, message) {
 
 function debug(str) {
   if (DEBUG) log(str);
+}
+
+/*
+ * resizeOneSelectedArtboard(context)
+ * ----------------------------------
+ * @param context The context object
+ *
+ * Wrapper function for resizing one selected artboard. This is not currently
+ * used, because resizeSelectedArtboards does the same thing.
+ */
+function resizeOneSelectedArtboard(context) {
+  debug("[Function Call] resizeOneSelectedArtboard(context)");
+  var artboard = context.selection.firstObject();
+  //Check if the user selected an artboard. Otherwise, we can't proceed.
+  if (artboard && artboard.className() == 'MSArtboardGroup') {
+      resizeArtboard(artboard);
+  } else {
+    throwNoArtboardSelectedError();
+  }
 }
