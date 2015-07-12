@@ -10,15 +10,23 @@
   "commands": [
     {
       "name": "Fit Selected Artboards to Content",
-      "identifier": "fit_artboards_to_content",
+      "identifier": "fit_selected",
       "shortcut": "ctrl shift z",
       "script": "resize_artboard.sketchscript",
+      "handler": "onRun"
+    },
+    {
+      "name": "Resize All Artboards on Current Page",
+      "identifier": "fit_all_on_page",
+      "shortcut": "ctrl cmd shift z",
+      "script": "fit_all_on_page.sketchscript",
       "handler": "onRun"
     }
   ],
   "menu": {
     "items": [
-      "fit_artboards_to_content"
+      "fit_selected",
+      "fit_all_on_page"
     ],
     "isRoot": "true"
   }

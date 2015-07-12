@@ -84,10 +84,27 @@ function resizeSelectedArtboards(context) {
   }
 }
 
-// function resizeAllArtboardsOnPage(context) {
-//
-// }
-//
+/*
+ * resizeAllArtboardsOnPage(context)
+ * ---------------------------------
+ * @param context The context object
+ *
+ * Wrapper function for resizing all artboards on the current page
+ */
+function resizeAllArtboardsOnPage(context) {
+  var page = context.document.currentPage();
+  var artboards = page.artboards();
+  if (artboards && artboards.count() > 0) {
+    var iter = [artboards objectEnumerator];
+    var artboard;
+    while (artboard = [iter nextObject]) {
+      if (artboard && artboard.className() == 'MSArtboardGroup') {
+        resizeArtboard(artboard);
+      }
+    }
+  } else exitWithError("No Artboards Found", "It looks like there are no artboards on the page named " + page.name() + ".");
+}
+
 // function resizeAllArtboards(context) {
 //
 // }

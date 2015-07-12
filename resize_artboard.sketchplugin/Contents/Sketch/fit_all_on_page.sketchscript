@@ -1,0 +1,5 @@
+@import 'shared.js'
+
+var onRun = function(context) {
+	resizeAllArtboardsOnPage(context);
+}
