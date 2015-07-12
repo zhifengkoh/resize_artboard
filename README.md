@@ -8,9 +8,14 @@ Select one or more artboards and enter
 
     CTRL + SHIFT + Z
 
-Alternatively, you can access the same command from the menu by navigating to
+Resize all the artboards on the current page with
+
+    CMD + CTRL + SHIFT + Z
+
+Alternatively, you can access the same commands from the menu by navigating to
 
     Plugins > Resize Artboard > Fit Artboards to Content
+    Plugins > Resize Artboard > Resize All Artboards on Current Page
 
 ### Installation
 
@@ -22,10 +27,10 @@ Alternatively, you can access the same command from the menu by navigating to
 
 - A resized artboard is never moved or repositioned; only its content is moved
 - Resize multiple selected artboards at once
-- (Upcoming) Resize all artboards on the page or in the project
+- Resize all artboards on the current page
 
 ### License & Version
 
-Version 0.3
+Version 1.0
 
 MIT License
