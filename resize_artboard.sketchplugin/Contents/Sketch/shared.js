@@ -1,5 +1,5 @@
 var APP = [NSApplication sharedApplication];
-var DEBUG = true;
+// var DEBUG = true;
 
 /*
  * resizeArtboard(artboard)
@@ -10,7 +10,7 @@ var DEBUG = true;
  * and then repositioning the content for a perfect fit
  */
 function resizeArtboard(artboard) {
-  debug("[Function Call] resizeArtboard()");
+  // debug("[Function Call] resizeArtboard()");
 
   var layers = artboard.layers();
   if (layers.count() == 0) {
@@ -62,7 +62,13 @@ function resizeArtboard(artboard) {
  * ---------------------------------
  * @param context The context object
  *
- * Wrapper function for resizing one or more selected artboards
+ * Wrapper function for resizing one or more selected artboards.
+ *
+ * This function differs from resizeAllArtboardsOnPage() in how it checks
+ * that at least one artboard was selected. In this function, a boolean variable
+ * is used to verify that the user's selection (which can be anything) contained
+ * at least one MSArtboardGroup. If not, it tells the user that they didn't select
+ * an artboard!
  */
 function resizeSelectedArtboards(context) {
   var artboards = context.selection;
@@ -89,7 +95,12 @@ function resizeSelectedArtboards(context) {
  * ---------------------------------
  * @param context The context object
  *
- * Wrapper function for resizing all artboards on the current page
+ * Wrapper function for resizing all artboards on the current page.
+ *
+ * Because this function doesn't depend on the user's selection, which can be
+ * error prone, but finds the array of artboards programmatically using the
+ * page object, we can verify up front that at least one artboard was found on
+ * the page.
  */
 function resizeAllArtboardsOnPage(context) {
   var page = context.document.currentPage();
@@ -109,22 +120,6 @@ function resizeAllArtboardsOnPage(context) {
 //
 // }
 
-function getLeftEdge(cgrect) {
-  return cgrect.origin.x;
-}
-
-function getRightEdge(cgrect) {
-  return cgrect.origin.x + cgrect.size.width;
-}
-
-function getTopEdge(cgrect) {
-  return cgrect.origin.y;
-}
-
-function getBottomEdge(cgrect) {
-  return cgrect.origin.y + cgrect.size.height;
-}
-
 function throwNoArtboardSelectedError() {
   exitWithError("No artboard selected", "You need to select an artboard");
 }
@@ -134,8 +129,22 @@ function exitWithError(title, message) {
   throw(nil);
 }
 
-function debug(str) {
-  if (DEBUG) log(str);
+// function debug(str) {
+//   if (DEBUG) log(str);
+// }
+
+// Convenience functions to get the coordinates of the four edges of a CGRect
+function getLeftEdge(cgrect) {
+  return cgrect.origin.x;
+}
+function getRightEdge(cgrect) {
+  return cgrect.origin.x + cgrect.size.width;
+}
+function getTopEdge(cgrect) {
+  return cgrect.origin.y;
+}
+function getBottomEdge(cgrect) {
+  return cgrect.origin.y + cgrect.size.height;
 }
 
 /*
@@ -147,7 +156,7 @@ function debug(str) {
  * used, because resizeSelectedArtboards does the same thing.
  */
 function resizeOneSelectedArtboard(context) {
-  debug("[Function Call] resizeOneSelectedArtboard(context)");
+  // debug("[Function Call] resizeOneSelectedArtboard(context)");
   var artboard = context.selection.firstObject();
   //Check if the user selected an artboard. Otherwise, we can't proceed.
   if (artboard && artboard.className() == 'MSArtboardGroup') {
