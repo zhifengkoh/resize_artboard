@@ -4,7 +4,7 @@ Resizes artboards in [Sketch](http://bohemiancoding.com/sketch) to fit their con
 
 ### Usage
 
-Select one or more artboards and enter
+Select one or more artboards (or one or more layers on one or more artboards) and enter
 
     CTRL + SHIFT + Z
 
