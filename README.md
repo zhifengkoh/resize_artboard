@@ -26,11 +26,12 @@ Alternatively, you can access the same commands from the menu by navigating to
 ### Features
 
 - A resized artboard is never moved or repositioned; only its content is moved
+- When resizing an artboard to fit its content, only visible (non-hidden) layers are considered, but the relative positioning of hidden layers with respect to visible layers is preserved
 - Resize multiple selected artboards at once
 - Resize all artboards on the current page
 
 ### License & Version
 
-Version 1.0
+Version 1.0.1
 
 MIT License

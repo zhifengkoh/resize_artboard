@@ -2,43 +2,61 @@ var APP = [NSApplication sharedApplication];
 // var DEBUG = true;
 
 /*
- * resizeArtboard(artboard)
- * ------------------------
+ * resizeArtboard(artboard, ignoreHidden)
+ * --------------------------------------
  * @param artboard An MSArtboardGroup object
+ * @param ignoreHidden Boolean. Defaults to true.
  *
  * Resizes a single artboard by fitting its dimensions to its content size,
- * and then repositioning the content for a perfect fit
+ * and then repositioning the content for a perfect fit.
+ *
+ * By default, hidden layers are not used to calculate content boundaries,
+ * but are repositioned. This behaviour can be controlled using the
+ * ignoreHidden parameter, which defaults to true. If this parameter is set to
+ * false, hidden layers are used to calculate the size of the bounding box.
  */
-function resizeArtboard(artboard) {
-  // debug("[Function Call] resizeArtboard()");
+function resizeArtboard(artboard, ignoreInvisibles) {
 
   var layers = artboard.layers();
   if (layers.count() == 0) {
     return; //If the artboard contains no layers, return and do nothing
   }
 
-  var layer = layers.firstObject();
-  var r = layer.rect();
-  //Set the boundaries of the bounding box to be the first layer for a baseline
-  var minX = getLeftEdge(r);
-  var minY = getTopEdge(r);
-  var maxX = getRightEdge(r);
-  var maxY = getBottomEdge(r);
+  ignoreInvisibles = ignoreInvisibles || true; // By default, ignore hidden layers
+  var boundaryVarsInitialized = false;
+  var layer;
+  var r;
+  var minX;
+  var minY;
+  var maxX;
+  var maxY;
 
   //Find the dimensions of the bounding box surrounding all the immediate child layers of the artboard
   for (var i = 0; i < layers.count(); i++) {
     layer = layers.objectAtIndex(i);
-    r = layer.rect();
 
-    var leftEdge = getLeftEdge(r);
-    var rightEdge = getRightEdge(r);
-    var topEdge = getTopEdge(r);
-    var bottomEdge = getBottomEdge(r);
+    // There are three conditions to proceed, and only one where we don't count this layer as part of the bounding box
+    if (!(!layer.isVisible() && ignoreInvisibles)) {
+      r = layer.rect();
 
-    if (leftEdge < minX) minX = leftEdge;
-    if (rightEdge > maxX) maxX = rightEdge;
-    if (topEdge < minY) minY = topEdge;
-    if (bottomEdge > maxY) maxY = bottomEdge;
+      if (!boundaryVarsInitialized) {
+        minX = getLeftEdge(r);
+        minY = getTopEdge(r);
+        maxX = getRightEdge(r);
+        maxY = getBottomEdge(r);
+        boundaryVarsInitialized = true;
+      }
+
+      var leftEdge = getLeftEdge(r);
+      var rightEdge = getRightEdge(r);
+      var topEdge = getTopEdge(r);
+      var bottomEdge = getBottomEdge(r);
+
+      if (leftEdge < minX) minX = leftEdge;
+      if (rightEdge > maxX) maxX = rightEdge;
+      if (topEdge < minY) minY = topEdge;
+      if (bottomEdge > maxY) maxY = bottomEdge;
+    }
   }
 
   //Resize the artboard
