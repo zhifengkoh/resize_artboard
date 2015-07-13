@@ -166,6 +166,39 @@ function getBottomEdge(cgrect) {
 }
 
 /*
+ * getParentArtboard(layer)
+ * ------------------------
+ * @param layer An MSLayer object
+ *
+ * Assumes that the input is well-formed and IS an MSLayer object.
+ */
+function getParentArtboard(layer) {
+  // Check if any layers were passed in to the function
+  if (layer == undefined) {
+		throwNoArtboardSelectedError();
+		return;
+	}
+
+  var currentLayer = layer;
+
+  while (true) {
+    var className = currentLayer.className();
+    if (className == 'MSPage') {
+      //If it's an MSPage, then there was no artboard selected to begin with
+      throwNoArtboardSelectedError();
+      break;
+    } else if (className == 'MSArtboardGroup') {
+      //If it's an MSArtboardGroup, we've found it and we can just return the currentLayer.
+      break;
+    } else {
+      //Otherwise, we're still nested deep inside an artboard
+      currentLayer = currentLayer.parentGroup();
+    }
+  }
+  return currentLayer;
+}
+
+/*
  * resizeOneSelectedArtboard(context)
  * ----------------------------------
  * @param context The context object
