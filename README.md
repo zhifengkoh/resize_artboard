@@ -33,6 +33,12 @@ Alternatively, you can access the same commands from the menu by navigating to
 
 ### License & Version
 
-Version 1.1.0
+Version 1.1.1
 
 MIT License
+
+### Changelog
+
+#### Version 1.1.1
+
+- Updated for Sketch 3.4.1
