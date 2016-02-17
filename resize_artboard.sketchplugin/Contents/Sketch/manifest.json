@@ -2,10 +2,10 @@
   "name": "Resize Artboard",
   "description": "Resizes artboards to fit their content",
   "author": "Zhifeng Koh",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "identifier": "com.zhifengkoh.sketch.resize-artboard",
   "updateURL": "https://zhifengkoh.github.io/resize_artboard",
-  "compatibleVersion": "3.4.1",
+  "compatibleVersion": "3.5.2",
   "bundleVersion": 1,
   "commands": [
     {
